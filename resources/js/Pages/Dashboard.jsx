@@ -5,7 +5,12 @@ import PrimaryButton from '@/Components/PrimaryButton';
 
 
 
-export default function Dashboard({ auth }) {
+export default function Dashboard({ auth, vm }) {
+
+    const capitalizeFirstLetter = (string) => {
+        if (!string) return '';
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -23,52 +28,28 @@ export default function Dashboard({ auth }) {
             
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-3">
-                <div className="relative rounded-lg border bg-white p-4  focus:outline-none">
-                    <img className='mx-auto' src="https://robohash.org/windows 11"/>
-                    <h2 className='text-center text-xl font-bold mt-4'>Windows 11</h2>
+                {vm.map(machine =>(
+                    <div className="relative rounded-lg border bg-white p-4  focus:outline-none">
+                    <img className='mx-auto' src={`https://robohash.org/${machine.name}`}/>
+                    <h2 className='text-center text-xl font-bold mt-4'>{machine.name}</h2>
                     
                     <div className="bg-white overflow-hidden sm:rounded-lg">
-                        <div className="flex items-center text-gray-900 mt-2"> <CircleStackIcon className='w-auto h-5 text-gray-700 mr-1'/> 18 GB storage</div>
-                        <div className="flex items-center text-gray-900 mt-2"> <InboxStackIcon className='w-auto h-5 text-gray-700 mr-1'/>8GB Ram</div>
-                        <div className="flex items-center text-gray-900 mt-2"><CpuChipIcon className='w-auto h-5 text-gray-700 mr-1'/>Core i7</div>
-                        <div className="flex items-center text-gray-900 mt-2"><div className='mr-3 w-3 h-3 bg-green-500 rounded-full'></div>Active</div>
+                        <div className="flex items-center text-gray-900 mt-2"> <CircleStackIcon className='w-auto h-5 text-gray-700 mr-1'/> {machine.storage} GB storage</div>
+                        <div className="flex items-center text-gray-900 mt-2"> <InboxStackIcon className='w-auto h-5 text-gray-700 mr-1'/>{machine.ram}GB Ram</div>
+                        <div className="flex items-center text-gray-900 mt-2"><CpuChipIcon className='w-auto h-5 text-gray-700 mr-1'/>{machine.processor}</div>
+                        <div className="flex items-center text-gray-900 mt-2"> {machine.status==='active' ? <div className='mr-3 w-3 h-3 bg-green-500 rounded-full'/>:<div className='mr-3 w-3 h-3 bg-red-500 rounded-full'/>} {capitalizeFirstLetter(machine.status)}</div>
                     </div>
 
                     <div className='flex'>
-                    <PrimaryButton className='mx-auto mt-5 w-1/2 bg-gray-700'><h2 className='text-center mx-auto'>OPEN</h2></PrimaryButton>
+                    <PrimaryButton onClick={()=>window.location.href=route('vm.show',machine.id)} className='mx-auto mt-5 w-1/2 bg-gray-700'><h2 className='text-center mx-auto'>OPEN</h2></PrimaryButton>
                     </div>
                 </div>
+                ))}
+                
 
-                <div className="relative rounded-lg border bg-white p-4  focus:outline-none">
-                    <img className='mx-auto' src="https://robohash.org/windows 10"/>
-                    <h2 className='text-center text-xl font-bold mt-4'>Windows 10</h2>
-                    
-                    <div className="bg-white overflow-hidden sm:rounded-lg">
-                        <div className="flex items-center text-gray-900 mt-2"> <CircleStackIcon className='w-auto h-5 text-gray-700 mr-1'/> 18 GB storage</div>
-                        <div className="flex items-center text-gray-900 mt-2"> <InboxStackIcon className='w-auto h-5 text-gray-700 mr-1'/>8GB Ram</div>
-                        <div className="flex items-center text-gray-900 mt-2"><CpuChipIcon className='w-auto h-5 text-gray-700 mr-1'/>Core i7</div>
-                        <div className="flex items-center text-gray-900 mt-2"><div className='mr-3 w-3 h-3 bg-green-500 rounded-full'></div>Active</div>
-                    </div>
+            
 
-                    <div className='flex'>
-                    <PrimaryButton className='mx-auto mt-5 w-1/2 bg-gray-700'><h2 className='text-center mx-auto'>OPEN</h2></PrimaryButton>
-                    </div>
-                </div>
-
-                <div className="relative rounded-lg border bg-white p-4  focus:outline-none">
-                    <img className='mx-auto' src="https://robohash.org/kali"/>
-                    <h2 className='text-center text-xl font-bold mt-4'>Kali Linux</h2>
-                    <div className="bg-white overflow-hidden sm:rounded-lg">
-                        <div className="flex items-center text-gray-900 mt-2"> <CircleStackIcon className='w-auto h-5 text-gray-700 mr-1'/> 36 GB storage</div>
-                        <div className="flex items-center text-gray-900 mt-2"> <InboxStackIcon className='w-auto h-5 text-gray-700 mr-1'/>8GB Ram</div>
-                        <div className="flex items-center text-gray-900 mt-2"><CpuChipIcon className='w-auto h-5 text-gray-700 mr-1'/>Core i5</div>
-                        <div className="flex items-center text-gray-900 mt-2"><div className='mr-3 w-3 h-3 bg-red-500 rounded-full'></div>Inactive</div>
-                    </div>
-
-                    <div className='flex'>
-                    <PrimaryButton className='mx-auto mt-5 w-1/2 bg-gray-700'><h2 className='text-center mx-auto'>OPEN</h2></PrimaryButton>
-                    </div>
-                </div>
+                
 
                 
             </div>

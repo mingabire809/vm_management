@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class VM extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'size', 'user_id'];
+    protected $fillable = ['name', 'storage', 'ram', 'processor', 'user_id', 'status'];
 
 
     public function users(){

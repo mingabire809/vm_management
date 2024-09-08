@@ -4,6 +4,7 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
+import Notification from '@/Components/Notification';
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -132,6 +133,9 @@ export default function Authenticated({ user, header, children }) {
             )}
 
             <main>{children}</main>
+            <div className="bg-gray-200">
+                <Notification/>
+            </div>
         </div>
     );
 }

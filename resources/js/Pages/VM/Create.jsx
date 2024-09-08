@@ -77,26 +77,11 @@ export default function Create({auth}){
       ];
 
       const storageSizes = [
-        "64GB", 
-        "128GB", 
-        "256GB", 
-        "512GB", 
-        "1TB",   // 1024GB
-        "2TB",   // 2048GB
-        "4TB",   // 4096GB
-        "8TB",   // 8192GB
-        "16TB"   // 16384GB
+        16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384
       ];
 
       const ramSizes = [
-        "2GB", 
-        "4GB", 
-        "8GB", 
-        "16GB", 
-        "32GB", 
-        "64GB", 
-        "128GB", 
-        "256GB"
+        2, 4, 8, 16, 32, 64, 128, 256
       ];
     
       const processors = [
@@ -129,18 +114,22 @@ export default function Create({auth}){
 
       const storageOptions = storageSizes.map((storage)=>({
         value: storage,
-        label: storage
+        label: `${storage} GB`
       }));
 
       const ramOptions = ramSizes.map((ram)=>({
         value: ram,
-        label: ram
+        label: `${ram} GB`
       }));
 
       const processorOptions = processors.map((processor)=>({
         value: processor,
         label: processor
       }));
+
+      const submit = ()=>{
+        post(route('vm.store'));
+      }
     return(
         <AuthenticatedLayout
             user={auth.user}
@@ -153,7 +142,9 @@ export default function Create({auth}){
             <Head title='VM creation'/>
 
             <div className='p-4'>
-            <form className='px-10'>
+            <form
+            onSubmit={submit}
+            className='px-10'>
             <div className="space-y-10">
             <div className="border-b border-gray-900/10 pb-12">
             
@@ -254,7 +245,7 @@ export default function Create({auth}){
             </div>
             </div>
 
-            <PrimaryButton className='h-11 bg-gray-900 mt-3 mx-auto'>CREATE THE VM</PrimaryButton>
+            <PrimaryButton type='submit' processing={processing} className='h-11 bg-gray-900 mt-3 mx-auto'>CREATE THE VM</PrimaryButton>
             </form>
             </div>
 
