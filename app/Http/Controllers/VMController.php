@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\VM;
+use App\Models\Backup;
+use App\Models\BackUpPricing;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class VMController extends Controller
 {
@@ -43,15 +46,44 @@ class VMController extends Controller
     {
         $user = auth()->user();
         $virtual = $user->vm()->findOrFail($vm);
-
+        
         return Inertia::render('VM/Show', [
-            'virtual' => $virtual
+            'virtual' => $virtual,
+            'backup' => $virtual->backup
         ]);
     }
 
-    public function update($vm)
+    public function status_update(Request $request, $vm)
     {
-        
+        $user = auth()->user();
+        $virtual = $user->vm()->findOrFail($vm);
+
+        $virtual->update([
+            'status' => $request->status
+        ]);
+
+        if($request->status=='active'){
+            return redirect()->back()->with('success', 'VM resumed successfully');
+        }else{
+            return redirect()->back()->with('success', 'VM suspended successfully successfully');
+        }
+    }
+
+    public function update(Request $request, $vm)
+    {
+        $user = auth()->user();
+        $virtual = $user->vm()->findOrFail($vm);
+
+        $data = $request->only(['storage', 'ram', 'processor']);
+    
+        $data = array_filter($data, function($value) {
+            return !is_null($value);
+        });
+
+
+        $virtual->update($data);
+
+        return redirect()->back()->with('success', 'Changes applied successfully');
     }
 
     public function delete($vm)
@@ -62,5 +94,31 @@ class VMController extends Controller
         $virtual->delete();
 
         return redirect()->route('dashboard')->with('success', 'VM deleted successfully');
+    }
+
+    public function backup_creation(Request $request, $vm)
+    {
+        $user = auth()->user();
+        $virtual = $user->vm()->findOrFail($vm);
+
+        $now = Carbon::now();
+        $backup = Backup::create([
+            'user_id' => $user->id,
+            'vm_id' => $virtual->id,
+            'backup_name' => $virtual->name . $now .$user->name,
+            'path' => '/backup/'.$user->name
+        ]);
+
+        $cost = (int)$virtual->storage * 10;
+
+        BackUpPricing::create([
+            'user_id' => $user->id,
+            'backup_id' => $backup->id,
+            'cost' => $cost
+        ]);
+
+        return redirect()->back()->with('success', 'Backup completed successfully');
+
+        
     }
 }

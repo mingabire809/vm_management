@@ -1,5 +1,6 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Link } from '@inertiajs/react';
+import Notification from '@/Components/Notification';
 
 export default function Guest({ children }) {
     return (
@@ -12,6 +13,10 @@ export default function Guest({ children }) {
 
             <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
                 {children}
+            </div>
+
+            <div className="bg-gray-200">
+                <Notification/>
             </div>
         </div>
     );

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\VMController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/virtual-machines/store', [VMController::class, 'store'])->name('vm.store');
     Route::get('/virtual-machines/{vm}', [VMController::class, 'show'])->name('vm.show');
     Route::delete('/virtual-machines/{vm}/delete', [VMController::class, 'delete'])->name('vm.delete');
+    Route::patch('/virtual-machines/{vm}/status', [VMController::class, 'status_update'])->name('vm.status');
+    Route::patch('/virtual-machines/{vm}/update', [VMController::class, 'update'])->name('vm.update');
+    Route::post('/virtual-machines/{vm}/backup', [VMController::class, 'backup_creation'])->name('vm.backup');
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('auth/google', [GoogleController::class, 'loginWithGoogle'])->name('google-login');
+Route::get('auth/google/callback', [GoogleController::class, 'callbackFromGoogle'])->name('callback');

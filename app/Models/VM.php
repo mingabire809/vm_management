@@ -14,4 +14,12 @@ class VM extends Model
     public function users(){
         return $this->belongsTo(User::class);
     }
+
+    public function backup(){
+        return $this->hasMany(Backup::class, 'vm_id');
+    }
+
+    public function cost(){
+        return $this->hasMany(BackUpPricing::class, 'vm_id');
+    }
 }
