@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\VMController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,6 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/virtual-machines/{vm}/status', [VMController::class, 'status_update'])->name('vm.status');
     Route::patch('/virtual-machines/{vm}/update', [VMController::class, 'update'])->name('vm.update');
     Route::post('/virtual-machines/{vm}/backup', [VMController::class, 'backup_creation'])->name('vm.backup');
+
+    //Subscription
+
+    Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
+    Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscription.subscribe');
+
 });
 
 require __DIR__.'/auth.php';
