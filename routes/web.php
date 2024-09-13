@@ -5,6 +5,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\VMController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\BackupController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -41,6 +43,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
     Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscription.subscribe');
+
+    Route::get('/billing', [BillingController::class, 'index'])->name('billing.index');
+    Route::post('/billing/pay', [BillingController::class, 'pay'])->name('billing.pay');
+
+    //Backups
+
+    Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
 
 });
 

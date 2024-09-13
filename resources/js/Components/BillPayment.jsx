@@ -7,25 +7,27 @@ import {
     Transition,
     TransitionChild,
 } from "@headlessui/react";
-import { CircleStackIcon } from "@heroicons/react/24/outline";
-
+import { BanknotesIcon } from "@heroicons/react/24/outline";
+import TextInput from "@/Components/TextInput";
+import InputLabel from "@/Components/InputLabel";
+import InputError from "@/Components/InputError";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { useForm } from "@inertiajs/react";
 
-export default function BackupCreation({open, setOpen, virtual}){
+export default function BillPayment({open, setOpen, billing}){
 
     const { data, setData, post, processing, errors, recentlySuccessful } =
     useForm({
-        
+        phone: ""        
 
     });
 
-    const cost = Number(virtual.storage) * 10
+   
 
     const submit = (e) => {
         e.preventDefault();
-        post(route("vm.backup", virtual.id), {
-            onSuccess: () => setOpen(false),
+        post(route("billing.pay"), {
+            onSuccess: () => {setOpen(false), setData("phone", "")},
         });
     };
 
@@ -62,7 +64,7 @@ export default function BackupCreation({open, setOpen, virtual}){
                             <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                                 <div className="sm:flex sm:items-start">
                                     <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 sm:mx-0 sm:h-10 sm:w-10">
-                                        <CircleStackIcon
+                                        <BanknotesIcon
                                             className="h-6 w-6 text-gray-700"
                                             aria-hidden="true"
                                         />
@@ -72,16 +74,52 @@ export default function BackupCreation({open, setOpen, virtual}){
                                             as="h3"
                                             className="text-base font-semibold leading-6 text-gray-900"
                                         >
-                                            Backup for {virtual.name}
+                                            Ksh {billing.bill} Payment
                                         </DialogTitle>
                                         <div className="mt-2">
                                             <p className="text-sm text-gray-500">
-                                                {virtual.storage} GB backup will cost you Ksh {cost}
+                                               Do you want to pay ksh {billing.bill} now?
                                             </p>
                                         </div>
                                          
                                     </div>
                                 </div>
+
+                                <div className="flex flex-1 flex-col justify-between">
+                                                <div className="divide-y divide-gray-200 px-4 sm:px-6">
+                                                    <div className="space-y-6 pb-5 pt-6">
+                                                        <div>
+                                                            <InputLabel
+                                                                htmlFor="name"
+                                                                value="Phone Number"
+                                                            />
+                                                            <TextInput
+                                                                id="name"
+                                                                className="block w-full"
+                                                                placeholder="2547XXXXXXXX"
+                                                                value={
+                                                                    data.phone
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData((prevData) => ({
+                                                                        ...prevData,
+                                                                        phone: e.target.value,
+                                                                      }))
+                                                                }
+                                                                required
+                                                            />
+                                                            <InputError
+                                                                message={
+                                                                    errors.phone
+                                                                }
+                                                            />
+                                                        </div>
+
+                                                        
+
+                                                    </div>
+                                                </div>
+                                            </div>
                               
                                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                                     <PrimaryButton
