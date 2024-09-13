@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
     //Backups
 
     Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
+    Route::get('/backup/{backup}/delete', [BackupController::class, 'delete'])->name('backup.delete');
 
 });
 

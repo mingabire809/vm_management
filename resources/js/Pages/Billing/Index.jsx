@@ -17,12 +17,12 @@ export default function Index({ auth, billing, payments }){
         user={auth.user}
         header={
             <div className='flex flex-wrap items-center justify-between'>
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">My bill</h2>
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">My Bill</h2>
                 </div>
         }
         >
 
-        <Head title="My bill"/>
+        <Head title="My Bill"/>
 
         <div className='p-3'>
         {billing && (
@@ -46,7 +46,7 @@ export default function Index({ auth, billing, payments }){
                          </div>
             )}
 
-            <div className='w-1/3 mx-auto'>
+            <div className='lg:w-1/3 mx-auto'>
                 <h2 className='mb-2 mt-2 text-xl font-bold'>Billing Payments</h2>
                 <table className="min-w-full divide-y divide-gray-300 border border-gray-300">
                 <thead className="bg-gray-200">
@@ -73,14 +73,14 @@ export default function Index({ auth, billing, payments }){
                     {payments.map(payment=>(
                          <tr className="hover:bg-gray-100">
  
-                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-base font-medium text-gray-900 sm:pl-3.5 hidden lg:table-cell">
+                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-base font-medium text-gray-900 sm:pl-3.5">
                          <span className="font-bold text-lg">{format(
                                             new Date(payment.created_at),
                                             "MMM dd, yyyy"
                                         )}</span>
                          </td>
 
-                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-base font-medium text-gray-900 sm:pl-3.5 hidden lg:table-cell">
+                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-base font-medium text-gray-900 sm:pl-3.5">
                          <span className="font-bold text-lg">Ksh {payment.amount?.toLocaleString()}</span>
                          </td>
                          </tr>

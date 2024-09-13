@@ -16,4 +16,14 @@ class BackupController extends Controller
             'backups' => $backup,
         ]);
     }
+
+    public function delete($backup)
+    {
+        $user = auth()->user();
+        $data_backup = $user->backup()->findOrFail($backup);
+
+        $data_backup->delete();
+
+        return redirect()->back()->with('success', 'Backup deleted successfully');
+    }
 }
