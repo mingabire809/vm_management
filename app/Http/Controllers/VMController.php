@@ -9,11 +9,15 @@ use App\Models\BackUpPricing;
 use App\Models\Billing;
 use Inertia\Inertia;
 use Carbon\Carbon;
+use App\Http\Resources\SubscriptionResource;
 
 class VMController extends Controller
 {
     public function create()
     {
+       /* $user = auth()->user();
+        $subscription = new SubscriptionResource($user->subscription);
+        dd($user->vm->count());*/
         return Inertia::render('VM/Create');
     }
 
@@ -27,6 +31,13 @@ class VMController extends Controller
             'ram' => 'required|integer',
             'processor' => 'required|string'
         ]);
+
+        //dd($user->vm->count());
+
+        if($user->vm->count() >= $user->subscription->rate_plan->number_of_vm_allowed)
+        {
+            return redirect()->back()->with('error', 'You have reached maximum number of vm from your subscription. Upgrade it!');
+        }
 
         VM::create([
             'name' => $data['name'],
@@ -103,6 +114,10 @@ class VMController extends Controller
         $virtual = $user->vm()->findOrFail($vm);
 
         $now = Carbon::now();
+        if($user->backup->count() >= $user->subscription->rate_plan->number_of_backup_allowed)
+        {
+            return redirect()->back()->with('error', 'You have reached maximum number of backups from your subscription. Upgrade it!');
+        }
         $backup = Backup::create([
             'user_id' => $user->id,
             'vm_id' => $virtual->id,

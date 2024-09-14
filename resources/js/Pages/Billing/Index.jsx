@@ -92,11 +92,13 @@ export default function Index({ auth, billing, payments }){
 
         </div>
 
-        <BillPayment
-        open={billPaymentOpen}
-        setOpen={setBillPaymentOpen}
-        billing={billing}
-        />
+        {billing &&(
+            <BillPayment
+            open={billPaymentOpen}
+            setOpen={setBillPaymentOpen}
+            billing={billing}
+            />
+        )}
 
         </AuthenticatedLayout>
     )
