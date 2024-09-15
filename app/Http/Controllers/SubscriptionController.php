@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\RatePlan;
 use App\Models\Subscription;
+use App\Models\Payment;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use App\Http\Resources\SubscriptionResource;
+use Illuminate\Support\Str;
 
 class SubscriptionController extends Controller
 {
@@ -34,8 +36,10 @@ class SubscriptionController extends Controller
         $user = auth()->user();
 
         $now = Carbon::now();
+
+        $rate = RatePlan::find($request->rateplan_id);
         
-       
+        
 
         if($user->subscription){
             $user->subscription->update([
@@ -52,6 +56,12 @@ class SubscriptionController extends Controller
             ]);
         }
 
+        Payment::create([
+            'user_id' => $user->id,
+            'transaction_number' => Str::upper(Str::random(10)),
+            'amount' => $rate->price,
+
+        ]);
         
 
         return redirect()->back()->with('sucess', 'Subscription made successfully');
