@@ -52,7 +52,10 @@ Route::middleware('auth')->group(function () {
     //Subscription
 
     Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
+    Route::get('/subscription/users', [SubscriptionController::class, 'users'])->name('subscription.users');
     Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscription.subscribe');
+    Route::post('/subscribe/{subscriptionId}/add-child-account', [SubscriptionController::class, 'add_child_account'])->name('subscription.add_child_account');
+    Route::post('/subscribe/{subscriptionId}/remove-child-account', [SubscriptionController::class, 'remove_child_account'])->name('subscription.remove_child_account');
 
     Route::get('/billing', [BillingController::class, 'index'])->name('billing.index');
     Route::post('/billing/pay', [BillingController::class, 'pay'])->name('billing.pay');

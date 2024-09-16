@@ -8,9 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Subscription extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'rateplan_id', 'starting_date', 'expiring_date'];
+    protected $fillable = ['user_id', 'rateplan_id', 'starting_date', 'expiring_date', 'child_account'];
 
-
+    protected $casts = [
+        'child_account' => 'array'
+    ];
+    
     public function rate_plan(){
         return $this->belongsTo(RatePlan::class, 'rateplan_id');
     }

@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('rateplan_id')->constrained('rate_plans')->cascadeOnDelete();
             $table->timestamp('starting_date');
-            $table->timestamp('expiring_date'); 
+            $table->timestamp('expiring_date');
+            $table->json('child_account')->nullable(); 
             $table->timestamps();
         });
     }

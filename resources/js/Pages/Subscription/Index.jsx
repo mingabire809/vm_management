@@ -5,17 +5,20 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { format } from "date-fns";
 import SubscriptionCreation from '@/Components/SubscriptionCreation';
 import { useState } from 'react';
+import AddChildAccount from '@/Components/AddChildAccount';
 
 
-export default function Index({ auth, rate, subscription }){
+export default function Index({ auth, rate, subscription, child_accounts }){
     const subscribe = (rate_id) =>{
         router.post(route('subscription.subscribe'), { rateplan_id: rate_id }, { preserveState: true });
     }
 
     const [subscriptionOpen, setSubscriptionOpen] = useState(false);
+    const [addChildAccountOpen, setAddChildAccountOpen] = useState(false);
     const [name, setName] = useState('');
     const [id, setId] = useState('');
     const [amount, setAmount] = useState('');
+    console.log(child_accounts)
     return(
         <AuthenticatedLayout
             user={auth.user}
@@ -50,7 +53,29 @@ export default function Index({ auth, rate, subscription }){
                         </div>
                          </div>
             )}
+            {subscription && (<PrimaryButton onClick={()=>setAddChildAccountOpen(true)}>ADD CHILD ACCOUNT</PrimaryButton>)}
+
+            {subscription && (
+                <div className="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-3">
+                {child_accounts.map(user=>(
+                     <div className="relative rounded-lg border bg-white p-4  focus:outline-none">
+                        <img className='mx-auto w-1/2 h-auto rounded-full' src={"https://ui-avatars.com/api/?name=" + user.name}/>
+                         <h2 className='text-center text-xl font-bold mt-4'>{user.name}</h2>
+
+                        <div className='flex'>
+                    <PrimaryButton 
+                    onClick={()=>{
+                        router.post(route('subscription.remove_child_account', subscription.id), { user_id: user.id }, { preserveState: true });  
+                    }} 
+                    className='mx-auto mt-5 w-1/2 bg-orange-700'><h2 className='text-center mx-auto'>REMOVE USER</h2></PrimaryButton>
+                    </div>
+                     </div>
+                ))}
             </div>
+            )}
+            </div>
+
+            
 
             <h2 className='text-center mt-2 mb-2 text-xl font-bold'>Make a subscription or upgrade your current one</h2>
 
@@ -84,6 +109,14 @@ export default function Index({ auth, rate, subscription }){
             subscriptionId={id}
             amount={amount}
             />
+
+            {subscription &&(
+                <AddChildAccount
+                open={addChildAccountOpen}
+                setOpen={setAddChildAccountOpen}
+                subscriptionId={subscription.id}
+            />
+            )}
 
         </AuthenticatedLayout>
     )
