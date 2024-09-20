@@ -8,11 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use OwenIt\Auditing\Contracts\Auditable;
 
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, Auditable
 {
     use HasFactory, Notifiable;
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +25,11 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+    ];
+
+    protected $auditInclude = [
+        'name',
+        'email',
     ];
 
     /**

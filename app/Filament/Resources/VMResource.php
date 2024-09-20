@@ -12,12 +12,28 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Events\ChangeVMOwner;
+use App\Events\NewVMOwner;
 
 class VMResource extends Resource
 {
     protected static ?string $model = VM::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-inbox-stack';
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::updating(function (VM $model) {
+            // Assuming the `owner_id` is the field to track ownership
+            $old_user_id = $model->getOriginal('user_id');
+            $new_user_id = $model->user_id;
+
+            broadcast(new ChangeVMOwner($old_user_id));
+            broadcast(new NewVMOwner($new_user_id));
+        });
+    }
 
     public static function form(Form $form): Form
     {

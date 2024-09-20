@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\VMResource\Pages;
+namespace App\Filament\Resources\AuditResource\Pages;
 
-use App\Filament\Resources\VMResource;
+use App\Filament\Resources\AuditResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-
-class EditVM extends EditRecord
+class EditAudit extends EditRecord
 {
-    protected static string $resource = VMResource::class;
-
+    protected static string $resource = AuditResource::class;
 
     protected function getHeaderActions(): array
     {
