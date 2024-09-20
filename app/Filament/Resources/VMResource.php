@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Events\ChangeVMOwner;
 use App\Events\NewVMOwner;
+use App\Models\User;
 
 class VMResource extends Resource
 {
@@ -30,8 +31,11 @@ class VMResource extends Resource
             $old_user_id = $model->getOriginal('user_id');
             $new_user_id = $model->user_id;
 
-            broadcast(new ChangeVMOwner($old_user_id));
-            broadcast(new NewVMOwner($new_user_id));
+            $oldOwner = User::find($old_user_id);
+            $newOwner = User::find($new_user_id);
+
+            broadcast(new ChangeVMOwner($oldOwner));
+            broadcast(new NewVMOwner($newOwner));
         });
     }
 

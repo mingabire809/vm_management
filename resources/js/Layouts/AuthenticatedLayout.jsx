@@ -1,16 +1,62 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import Notification from '@/Components/Notification';
+import { AnimatePresence, motion } from 'framer-motion'
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const [notifications, setNotifications] = useState([])
+
+    const variants = {
+        hidden: { opacity: 0, x: '100%' },
+        visible: { opacity: 1, x: 0 },
+        exit: { opacity: 0, x: '100%' }
+    }
+
+    useEffect(() => {
+        Echo.private(`management.${user.id}`)
+            .listen('ChangeVMOwner', event => {
+                console.log(event)
+                setNotifications(prevArray => [...prevArray, event])
+                router.reload()
+            })
+            .listen('NewVMOwner', event => {
+                console.log(event)
+                setNotifications(prevArray => [...prevArray, event])
+                router.reload()
+            })
+    }, [])
+
+    const filteredNotifs = notifications.filter(
+        notif => notif.user.id === user.id
+    )
 
     return (
         <div className="min-h-screen bg-gray-100">
+
+<ul className="fixed right-6 top-6 z-20 flex flex-col gap-2">
+                <AnimatePresence>
+                    {filteredNotifs.map(notif => (
+                        <motion.li
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                            variants={variants}
+                            transition={{ duration: 0.5 }}
+                            key={notif.user.id}
+                        >
+                            <div className='bg-white h-10 items-center flex'>
+                                <h3>The virtual machine has a new owner</h3>
+                            </div>
+                        </motion.li>
+                    ))}
+                </AnimatePresence>
+            </ul>
+
             <nav className="bg-white border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
