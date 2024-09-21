@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: laravel
-          image: your-docker-image  # Replace with your image, e.g., "yourusername/laravel-app:latest"
+          image: mingabire809/vm:latest   # Replace with your image, e.g., "yourusername/laravel-app:latest"
           ports:
             - containerPort: 9000   # Your application will listen on port 9000 (PHP-FPM)
