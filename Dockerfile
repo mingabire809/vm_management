@@ -6,8 +6,11 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \
     unzip \
-    && docker-php-ext-install intl zip pdo pdo_mysql \
-    && docker-php-ext-enable intl zip
+    libpq-dev \  # Required for PostgreSQL
+    nodejs \
+    npm \
+    && docker-php-ext-install intl zip pdo pdo_pgsql \  # Use pdo_pgsql for PostgreSQL
+    && docker-php-ext-enable intl zip pdo_pgsql
 
 # Install Composer globally
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -20,6 +23,15 @@ COPY . .
 
 # Install PHP dependencies using Composer
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Install Node.js dependencies using npm
+RUN npm install
+
+# Build assets (you can change this to your actual build command)
+RUN npm run build
+
+# Run database migrations
+RUN php artisan migrate --force
 
 # Expose the port that your web server is running on
 EXPOSE 9000

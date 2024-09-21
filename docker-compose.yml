@@ -8,15 +8,16 @@ services:
     volumes:
       - .:/var/www
     networks:
-      - laravel_network
+      - laravel
     environment:
       - DB_CONNECTION=pgsql
-      - DB_HOST=postgres
+      - DB_HOST=127.0.0.1
       - DB_PORT=5432
       - DB_DATABASE=vm
       - DB_USERNAME=admin
       - DB_PASSWORD=password
     depends_on:
+      - php
       - postgres
 
   nginx:
@@ -27,23 +28,24 @@ services:
       - "443:443"
     volumes:
       - .:/var/www
-      - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - laravel_network
     depends_on:
-      - app
+      - php
+      - postgres
 
   postgres:
     image: postgres:13
     container_name: postgres
     environment:
-      POSTGRES_DB: laravel
-      POSTGRES_USER: postgres
+      POSTGRES_DB: vm
+      POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - laravel_network
+      - laravel
 
 networks:
   laravel_network:
