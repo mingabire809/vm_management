@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel-app
+spec:
+  replicas: 1  # Number of instances of your application
+  selector:
+    matchLabels:
+      app: laravel
+  template:
+    metadata:
+      labels:
+        app: laravel
+    spec:
+      containers:
+        - name: laravel
+          image: your-docker-image  # Replace with your image, e.g., "yourusername/laravel-app:latest"
+          ports:
+            - containerPort: 9000   # Your application will listen on port 9000 (PHP-FPM)

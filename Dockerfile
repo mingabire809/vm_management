@@ -1,0 +1,28 @@
+# Use PHP 8.3 FPM base image
+FROM php:8.3-fpm
+
+# Install system dependencies and PHP extensions
+RUN apt-get update && apt-get install -y \
+    libicu-dev \
+    libzip-dev \
+    unzip \
+    && docker-php-ext-install intl zip pdo pdo_mysql \
+    && docker-php-ext-enable intl zip
+
+# Install Composer globally
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy existing application files
+COPY . .
+
+# Install PHP dependencies using Composer
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Expose the port that your web server is running on
+EXPOSE 9000
+
+# Start the PHP-FPM server
+CMD ["php-fpm"]
