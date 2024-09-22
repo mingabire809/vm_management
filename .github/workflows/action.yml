@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
+ 
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Set up PHP and Node.js (if applicable)
+   
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -23,34 +23,34 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'  # or your preferred version
+          node-version: '20' 
 
-      # Step 3: Install dependencies
+     
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Install Node.js dependencies
         run: npm install
 
-      # Step 4: Run tests
+      
       - name: Run tests
         run: |
-          php artisan test  # Adjust to your test command
+          php artisan test  
 
-      # Step 5: Build Docker image
+      
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: vm:latest  # Change to your image name
+          tags: vm:latest
 
-      # Step 6: Set up Kubernetes context
+      
       - name: Set up Kubeconfig
         run: echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
-      # Step 7: Deploy to Kubernetes
+      
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/laravel-deployment.yaml
