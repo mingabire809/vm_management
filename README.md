@@ -12,7 +12,7 @@ A web server (Apache, Nginx, or Laravel's built-in server)
 [Optional] Docker (for containerized setup)
 
 
-git clone https://github.com/your-username/your-repository.git
+git clone https://github.com/mingabire809/vm_management.git
 cd your-repository
 
 Install dependencies:
@@ -26,6 +26,8 @@ Install JavaScript dependencies using NPM or Yarn:
 
 
 npm install
+
+
 Set up environment file:
 
 Create a .env file by copying the example file:
