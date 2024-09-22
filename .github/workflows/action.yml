@@ -36,7 +36,7 @@ jobs:
       - name: Run tests
         run: |
           vendor/bin/phpunit  # Adjust to your test command
-          npm test  # Adjust to your test command
+          php artisan test  # Adjust to your test command
 
       # Step 5: Build Docker image
       - name: Build and push Docker image
