@@ -72,10 +72,13 @@ Set up file storage (optional):
 php artisan storage:link
 Run database seeders (optional):
 
-If you have seeders to populate your database with initial data, run the following:
+To populate your database with initial data, run the following:
 
 
 php artisan db:seed
+
+It contains some random users, but there is the admin user which is:  admin@careldevstudio.com/Admin.12
+
 Running the Application
 To run the application in a local development environment, follow these steps:
 
@@ -88,10 +91,13 @@ By default, the application will be accessible at http://127.0.0.1:8000.
 
 Run frontend development server:
 
-
-
 npm run dev
-This will compile your JavaScript and CSS assets.
+
+To run socket which is the one enabling notifications:
+
+php artisan reverb:start
+php artisan queue:listen
+
 
 Testing
 This project includes automated tests. To run the tests, follow these steps:
@@ -108,13 +114,10 @@ DB_PORT=5432
 DB_DATABASE=your_testing_database
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
+
 You can create a separate PostgreSQL database for testing:
 
-bash
-Copy code
-psql -U postgres
-CREATE DATABASE your_testing_database;
-Run the tests:
+
 
 Use the following command to run all the tests:
 
