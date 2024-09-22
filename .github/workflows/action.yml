@@ -35,7 +35,6 @@ jobs:
       # Step 4: Run tests
       - name: Run tests
         run: |
-          vendor/bin/phpunit  # Adjust to your test command
           php artisan test  # Adjust to your test command
 
       # Step 5: Build Docker image
