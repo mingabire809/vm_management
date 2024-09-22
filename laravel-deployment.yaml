@@ -1,40 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: laravel-app
+  name: php
+  labels:
+    tier: backend
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
-      app: laravel-app
+      app: php
+      tier: backend
   template:
     metadata:
       labels:
-        app: laravel-app
+        app: php
+        tier: backend
     spec:
+      volumes:
+      - name: dir
+        hostPath:
+          path: /code
       containers:
-      - name: laravel-app
-        image: your-registry/laravel-app:v1
-        ports:
-        - containerPort: 9000
-        env:
-        - name: DB_HOST
-          valueFrom:
-            secretKeyRef:
-              name: db-secrets
-              key: db-host
-        - name: DB_DATABASE
-          valueFrom:
-            secretKeyRef:
-              name: db-secrets
-              key: db-name
-        - name: DB_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: db-secrets
-              key: db-username
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-secrets
-              key: db-password
+      - name: php
+        image: hirenkavad/laravel-k8:1.5.1
+        volumeMounts:
+        - name: dir
+          mountPath: /code
+      initContainers:
+      - name: install
+        image: busybox
+        volumeMounts:
+        - name: dir
+          mountPath: /code
+        command:
+        - cp
+        - "-r"
+        - "/var/www/."
+        - "/code/app"
